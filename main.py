@@ -26,12 +26,18 @@ yesterday_closing_price = yesterday_data["4. close"]
 day_before_yesterday_data = data_list[1]
 day_before_yesterday_closing_price = day_before_yesterday_data["4. close"]
 
-difference = abs(float(yesterday_closing_price) - float(day_before_yesterday_closing_price))
-diff_percent = (difference / float(yesterday_closing_price)) * 100
+difference = float(yesterday_closing_price) - float(day_before_yesterday_closing_price)
+up_down = None
+if difference > 0:
+    up_down = "🔺"
+else:
+    up_down = "🔻"
+
+diff_percent = round((difference / float(yesterday_closing_price)) * 100)
 
 # In order to check if this is working we must set the value to a number lower than the percentage.
 # The required value for the exercise is 5
-if diff_percent > 0:
+if abs(diff_percent) > 0:
     news_params = {
         "apiKey": NEWS_API_KEY,
         "qInTitle": COMPANY_NAME,
@@ -42,7 +48,8 @@ if diff_percent > 0:
     first_three_articles = articles[:3]
 
     formatted_news = [
-        f"Headline: {article['title']}.\nBrief: {article['description']}" for article in first_three_articles
+        f"{STOCK_NAME}: {up_down}{diff_percent}%\nHeadline: {article['title']}.\nBrief: {article['description']}"
+        for article in first_three_articles
     ]
 
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
