@@ -1,4 +1,5 @@
 import requests
+from twilio.rest import Client
 
 STOCK_NAME = "TSLA"
 COMPANY_NAME = "Tesla Inc"
@@ -8,6 +9,11 @@ NEWS_ENDPOINT = "https://newsapi.org/v2/everything"
 
 STOCK_API_KEY = "P7FEEGDXXECOBSTM"
 NEWS_API_KEY = "1c5a322ed48b46e39bae5f45f649dffb"
+
+TWILIO_ACCOUNT_SID = ""
+TWILIO_AUTH_TOKEN = ""
+TWILIO_VIRTUAL_NUMBER = "+"
+TWILIO_DESTINATION_NUMBER = "+"
 
 stock_params = {"function": "TIME_SERIES_DAILY", "symbol": STOCK_NAME, "apikey": STOCK_API_KEY}
 
@@ -38,4 +44,12 @@ if diff_percent > 0:
     formatted_news = [
         f"Headline: {article['title']}.\nBrief: {article['description']}" for article in first_three_articles
     ]
-    print(formatted_news)
+
+    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
+    for article in formatted_news:
+        message = client.messages.create(
+            body=article,
+            from_=TWILIO_VIRTUAL_NUMBER,
+            to=TWILIO_DESTINATION_NUMBER,
+        )
