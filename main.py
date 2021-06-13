@@ -38,4 +38,5 @@ if diff_percent > 0:
 
     news_response = requests.get(NEWS_ENDPOINT, params=news_params)
     articles = news_response.json()["articles"]
-    print(articles)
+    first_three_articles = articles[:3]
+    print(first_three_articles)
