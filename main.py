@@ -26,3 +26,8 @@ print(difference)
 
 diff_percent = (difference / float(yesterday_closing_price)) * 100
 print(diff_percent)
+
+# In order to check if this is working we must set the value to a number lower than the percentage.
+# The required value for the exercise is 5
+if diff_percent > 0:
+    print("Get News")
